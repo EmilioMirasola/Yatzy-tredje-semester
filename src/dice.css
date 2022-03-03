@@ -1,0 +1,17 @@
+.dice {
+    border: 2px solid black;
+    text-align: center;
+    height: 150px;
+    width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    vertical-align: middle;
+}
+
+.hold {
+    border: 5px solid black;
+}
