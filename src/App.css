@@ -1,13 +1,15 @@
 .app {
-    display: flex;
-    height: 100vh;
-    flex-direction: column;
-    justify-content: space-evenly;
+    display: grid;
+    column-gap: 50px;
+    row-gap: 50px;
+    height: 75vh;
+    width: 75%;
+    margin: auto;
 }
 
 .diceContainer {
-    width: 50%;
+    grid-column-start: 0;
+    grid-row-start: 1;
     display: flex;
     justify-content: space-evenly;
-    transform: translate(50%, 50%);
 }

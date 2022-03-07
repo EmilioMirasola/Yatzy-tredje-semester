@@ -3,16 +3,22 @@ import React, {createContext, useContext, useState} from "react";
 
 export const DiceContext = ({children}) => {
     const [diceStates, setDiceStates] = useState([
-        createInitDiceState(0),
-        createInitDiceState(1),
-        createInitDiceState(2),
-        createInitDiceState(3),
-        createInitDiceState(4)
+        createInitDiceState(),
+        createInitDiceState(),
+        createInitDiceState(),
+        createInitDiceState(),
+        createInitDiceState()
     ])
+
+    const [hasRolled, setHasRolled] = useState(false)
+    const [rollsLeft, setRollsLeft] = useState(3)
 
     return (
         <Context.Provider value={{
             diceStates,
+            rollsLeft,
+            handleScoreChosen,
+            hasRolled,
             rollDices,
             holdDice,
             releaseDice
@@ -22,21 +28,25 @@ export const DiceContext = ({children}) => {
     )
 
     function rollDices() {
-        const dicesToRoll = diceStates.filter(dice => !dice.hold);
-        const newStateArray = [...diceStates];
+        if (rollsLeft > 0) {
 
-        dicesToRoll.forEach(dice => {
-            dice.value = getRandomInt();
-            newStateArray[dice.index] = dice;
-        });
+            const newStateArray = [...diceStates];
 
-        setDiceStates(newStateArray);
+            diceStates.forEach((dice, index) => {
+                if (!dice.hold) {
+                    dice.value = getRandomInt();
+                    newStateArray[index] = dice;
+                }
+            });
+
+            setHasRolled(true)
+            setRollsLeft(prevState => prevState - 1)
+            setDiceStates(newStateArray);
+        }
     }
 
     function holdDice(diceIndex) {
         const newStateArray = [...diceStates];
-        console.log(newStateArray)
-        console.log(diceIndex)
         newStateArray[diceIndex].hold = true;
 
         setDiceStates(newStateArray);
@@ -49,13 +59,19 @@ export const DiceContext = ({children}) => {
         setDiceStates(newStateArray);
     }
 
+    function handleScoreChosen() {
+        const newDiceStateArray = Array.of(createInitDiceState(), createInitDiceState(), createInitDiceState(), createInitDiceState(), createInitDiceState())
+        setHasRolled(false)
+        setDiceStates(newDiceStateArray)
+        setRollsLeft(3)
+    }
+
 }
 
-function createInitDiceState(index) {
+function createInitDiceState() {
     return {
         value: 1,
         hold: false,
-        index: index
     }
 }
 

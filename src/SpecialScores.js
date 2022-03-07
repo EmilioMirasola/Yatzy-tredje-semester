@@ -1,4 +1,6 @@
 import {useSpecialScoresContext} from "./context/SpecialScoresContext";
+import {DiscardButton} from "./DiscardButton";
+import {ScoreBox} from "./ScoreBox";
 
 
 export const SpecialScores = () => {
@@ -13,64 +15,124 @@ export const SpecialScores = () => {
         chance,
         yatzy,
         handleSetOnePair,
-        handleSetTwoPairs
+        handleSetTwoPairs,
+        handleSetNumberOfSame,
+        handleSetFullHouse,
+        handleSetSmallStraight,
+        handleSetLargeStraight,
+        handleSetChance,
+        handleSetYatzy
     } = useSpecialScoresContext()
-    return (
-        <div>
-            <div
-                key={1}
-                onClick={() => !onePair.locked && handleSetOnePair()}>
-                <p className={onePair.locked ? "locked" : ""}>One pair {onePair.value}</p>
-            </div>
 
-            <div
-                key={2}
-                onClick={() => !twoPairs.locked && handleSetTwoPairs()}>
-                <p className={twoPairs.locked ? "locked" : ""}>Two pairs {twoPairs.value}</p>
-            </div>
+    return (<div>
+        {onePairDisplay()}
+        {twoPairsDisplay()}
+        {threeSameDisplay()}
+        {fourSameDisplay()}
+        {fullHouseDisplay()}
+        {smallStraightDisplay()}
+        {largeStraightDisplay()}
+        {chanceDisplay()}
+        {yatzyDisplay()}
+    </div>);
 
-            <div
-                key={3}
-                onClick={() => !threeSame.locked && handleSetChosenDiceValue(3)}>
-                <p className={threeSame.locked ? "locked" : ""}>Three same {threeSame.value}</p>
-            </div>
+    function onePairDisplay() {
+        return <ScoreBox
+            onChosen={() => canSetScore(onePair) && handleSetOnePair()}
+            discarded={onePair.discarded}
+        >
+            <div className={shouldApplyUsedClass(onePair) ? "used" : ""}>One pair {onePair.score}</div>
+            <DiscardButton onDiscard={() => handleSetOnePair(true)}/>
+        </ScoreBox>;
+    }
 
-            <div
-                key={4}
-                onClick={() => !fourSame.locked && handleSetChosenDiceValue(4)}>
-                <p className={fourSame.locked ? "locked" : ""}>Forur same {fourSame.value}</p>
-            </div>
+    function twoPairsDisplay() {
+        return <ScoreBox
+            onChosen={() => canSetScore(twoPairs) && handleSetTwoPairs()}
+            discarded={twoPairs.discarded}
+        >
+            <p className={shouldApplyUsedClass(twoPairs) ? "used" : ""}>Two pairs {twoPairs.score}</p>
+            <DiscardButton onDiscard={() => handleSetTwoPairs(true)}/>
+        </ScoreBox>;
+    }
 
-            <div
-                key={5}
-                onClick={() => !fullHouse.locked && handleSetChosenDiceValue(5)}>
-                <p className={fullHouse.locked ? "locked" : ""}>Five same {fullHouse.value}</p>
-            </div>
+    function threeSameDisplay() {
+        return <ScoreBox
+            onChosen={() => canSetScore(threeSame) && handleSetNumberOfSame(3)}
+            discarded={threeSame.discarded}
+        >
+            <p className={shouldApplyUsedClass(threeSame) ? "used" : ""}>Three same {threeSame.score}</p>
+            <DiscardButton onDiscard={() => handleSetNumberOfSame(3, true)}/>
+        </ScoreBox>;
+    }
 
-            <div
-                key={6}
-                onClick={() => !smallStraight.locked && handleSetChosenDiceValue(6)}>
-                <p className={smallStraight.locked ? "locked" : ""}>Six same {smallStraight.value}</p>
-            </div>
+    function fourSameDisplay() {
+        return <ScoreBox
+            onChosen={() => canSetScore(fourSame) && handleSetNumberOfSame(4)}
+            discarded={fourSame.discarded}
+        >
+            <p className={shouldApplyUsedClass(fourSame) ? "used" : ""}>Four same {fourSame.score}</p>
+            <DiscardButton onDiscard={() => handleSetNumberOfSame(4, true)}/>
+        </ScoreBox>;
+    }
 
-            <div
-                key={7}
-                onClick={() => !largeStraight.locked && handleSetChosenDiceValue(6)}>
-                <p className={largeStraight.locked ? "locked" : ""}>6-s {largeStraight.value}</p>
-            </div>
+    function fullHouseDisplay() {
+        return <ScoreBox
+            onChosen={() => canSetScore(fullHouse) && handleSetFullHouse()}
+            discarded={fullHouse.discarded}
+        >
+            <p className={shouldApplyUsedClass(fullHouse) ? "used" : ""}>Full house {fullHouse.score}</p>
+            <DiscardButton onDiscard={() => handleSetFullHouse(true)}/>
+        </ScoreBox>;
+    }
 
-            <div
-                key={8}
-                onClick={() => !chance.locked && handleSetChosenDiceValue(6)}>
-                <p className={chance.locked ? "locked" : ""}>6-s {chance.value}</p>
-            </div>
+    function smallStraightDisplay() {
+        return <ScoreBox
+            onChosen={() => canSetScore(smallStraight) && handleSetSmallStraight()}
+            discarded={smallStraight.discarded}
+        >
+            <p className={shouldApplyUsedClass(smallStraight) ? "used" : ""}>Small straight{smallStraight.score}</p>
+            <DiscardButton onDiscard={() => handleSetSmallStraight(true)}/>
+        </ScoreBox>;
+    }
 
-            <div
-                key={9}
-                onClick={() => !yatzy.locked && handleSetChosenDiceValue(6)}>
-                <p className={yatzy.locked ? "locked" : ""}>6-s {yatzy.value}</p>
-            </div>
+    function largeStraightDisplay() {
+        return <ScoreBox
+            onChosen={() => canSetScore(largeStraight) && handleSetLargeStraight()}
+            discarded={largeStraight.discarded}
+        >
+            <p className={shouldApplyUsedClass(largeStraight) ? "used" : ""}>Large straight{largeStraight.score}</p>
+            <DiscardButton onDiscard={() => handleSetLargeStraight(true)}/>
+        </ScoreBox>;
+    }
 
-        </div>
-    );
+    function chanceDisplay() {
+        return <ScoreBox
+            onChosen={() => canSetScore(chance) && handleSetChance()}
+            discarded={chance.discarded}
+        >
+            <p className={shouldApplyUsedClass(chance) ? "used" : ""}>Chance {chance.score}</p>
+            <DiscardButton onDiscard={() => handleSetChance(true)}/>
+        </ScoreBox>;
+    }
+
+    function yatzyDisplay() {
+        return <ScoreBox
+            onChosen={() => canSetScore(yatzy) && handleSetYatzy()}
+            discarded={yatzy.discarded}
+        >
+            <div className={shouldApplyUsedClass(yatzy) ? "used" : ""}>Yatzy {yatzy.score}</div>
+            <DiscardButton onDiscard={() => handleSetYatzy(true)}/>
+        </ScoreBox>;
+    }
+}
+
+function shouldApplyUsedClass(objToCheck) {
+    if (objToCheck.discarded) {
+        return true;
+    } else return objToCheck.score !== 0;
+}
+
+function canSetScore(objToCheck) {
+    return objToCheck.discarded !== true && objToCheck.score === 0
 }

@@ -1,0 +1,10 @@
+.scoreBoxDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 10%;
+}
+
+.discarded {
+    text-decoration: line-through;
+}

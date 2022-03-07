@@ -1,6 +1,6 @@
 import './App.css';
 import React from "react";
-import {AllDice} from "./AllDice";
+import {Dice} from "./Dice";
 import {Bonus} from "./Bonus";
 import {SpecialScores} from "./SpecialScores";
 
@@ -8,7 +8,7 @@ function YatzyApp() {
 
     return (
         <div className="app">
-            <AllDice/>
+            <Dice/>
             <Bonus/>
             <SpecialScores/>
         </div>

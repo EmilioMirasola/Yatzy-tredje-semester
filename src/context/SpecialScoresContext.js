@@ -1,10 +1,20 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {useDiceContext} from "./DiceContext";
+import {
+    calculateChanceScore,
+    calculateLargeStraightScore,
+    calculateSmallStraightScore,
+    calculateYatzyScore,
+    findFullHouseScore,
+    findHighestPairValue,
+    findLargestOfSameValue,
+    findPairs,
+    mapDiceStateToDiceValueArray,
+    rollIsYatzy
+} from "../logic/specialScoresCalculation";
 
 const initState = {
-    value: 0,
-    locked: false,
-    discarded: false,
+    score: 0, discarded: false,
 }
 
 export const SpecialScoresContext = ({children}) => {
@@ -19,9 +29,11 @@ export const SpecialScoresContext = ({children}) => {
     const [yatzy, setYatzy] = useState(initState)
     const [specialScoresSum, setSpecialScoresSum] = useState(0)
 
-    const {diceStates} = useDiceContext()
+    const {diceStates, handleScoreChosen} = useDiceContext()
 
-    useEffect(handleSetSum, [
+    useEffect(handleScoreChange, [onePair, twoPairs, threeSame, fourSame, fullHouse, smallStraight, largeStraight, chance, yatzy])
+
+    return (<Context.Provider value={{
         onePair,
         twoPairs,
         threeSame,
@@ -30,124 +42,149 @@ export const SpecialScoresContext = ({children}) => {
         smallStraight,
         largeStraight,
         chance,
-        yatzy])
+        setChance,
+        yatzy,
+        handleSetTwoPairs,
+        handleSetOnePair,
+        handleSetNumberOfSame,
+        handleSetSmallStraight,
+        handleSetFullHouse,
+        handleSetLargeStraight,
+        handleSetChance,
+        handleSetYatzy,
+        specialScoresSum
+    }}>
+        {children}
+    </Context.Provider>)
 
-    return (
-        <Context.Provider value={{
-            onePair, handleSetOnePair,
-            twoPairs, handleSetTwoPairs,
-            threeSame, setThreeSame,
-            fourSame, setFourSame,
-            fullHouse, setFullHouse,
-            smallStraight, setSmallStraight,
-            largeStraight, setLargeStraight,
-            chance, setChance,
-            yatzy, setYatzy,
-            specialScoresSum
-        }}>
-            {children}
-        </Context.Provider>
-    )
-
-    function handleSetSum() {
-        setSpecialScoresSum(onePair.value + twoPairs.value + threeSame.value + fourSame.value + fullHouse.value + smallStraight.value + largeStraight.value + chance.value + yatzy.value);
+    function handleScoreChange() {
+        setSpecialScoresSum(onePair.score + twoPairs.score + threeSame.score + fourSame.score + fullHouse.score + smallStraight.score + largeStraight.score + chance.score + yatzy.score);
+        handleScoreChosen()
     }
 
-    function handleSetOnePair() {
+    function handleSetOnePair(discard) {
         const newOnePair = {...onePair}
-        const pairs = findPairs();
-        const highestPair = Math.max(...pairs.keys())
-        newOnePair.value = highestPair * 2
-
+        if (discard) {
+            handleDiscard(newOnePair, (obj) => setOnePair(obj))
+        } else {
+            newOnePair.score = findHighestPairValue(diceStates)
+        }
         setOnePair(newOnePair)
     }
 
-    function handleSetTwoPairs() {
+    function handleSetTwoPairs(discard) {
         const newTwoPairs = {...twoPairs}
-        const pairs = findPairs();
-        let highest = 0;
-        let secondHighest = 0;
+        if (discard) {
+            handleDiscard(newTwoPairs, (obj) => setTwoPairs(obj))
+        } else {
+            const pairs = findPairs(diceStates);
 
-        if (pairs.size > 1) {
-            for (const [key] of pairs) {
-                if (key > highest) {
-                    highest = key;
-                } else if (key > secondHighest) {
-                    secondHighest = key;
-                }
+            if (pairs.length > 1) {
+                newTwoPairs.score = pairs.reduce((previousValue, currentValue) => previousValue + currentValue[0] * 2, 0)
             }
+        }
 
-            newTwoPairs.value = highest * 2 + secondHighest * 2
-            setTwoPairs(newTwoPairs)
+        setTwoPairs(newTwoPairs)
+    }
+
+    function handleSetNumberOfSame(minimumNumberOfSameValue, discard) {
+        let newState;
+        let setter
+        switch (minimumNumberOfSameValue) {
+            case 3:
+                newState = {...threeSame}
+                setter = setThreeSame
+                break;
+            case 4:
+                newState = {...fourSame}
+                setter = setFourSame
+                break;
+            default:
+                return
+        }
+
+        if (discard) {
+            handleDiscard(newState, (obj) => setter(obj))
+        } else {
+            const largestOfSameValue = findLargestOfSameValue(diceStates, minimumNumberOfSameValue)
+
+            if (largestOfSameValue) {
+                newState.score = largestOfSameValue * minimumNumberOfSameValue
+            }
+        }
+        setter(newState)
+    }
+
+    function handleSetFullHouse(discard) {
+        if (discard) {
+            handleDiscard({...discard}, (obj) => setFullHouse(obj))
+        } else {
+
+            const score = findFullHouseScore(diceStates)
+
+            const newState = {...fullHouse}
+            newState.score = score;
+
+            setFullHouse(newState)
         }
     }
 
-    function findPairs() {
-        const counterMap = new Map()
-
-        for (const dice of diceStates) {
-            if (!counterMap.has(dice.value)) {
-                counterMap.set(dice.value, 1)
-            } else {
-                counterMap.set(dice.value, counterMap.get(dice.value) + 1)
+    function handleSetSmallStraight(discard) {
+        if (discard) {
+            handleDiscard({...discard}, (obj) => setSmallStraight(obj))
+        } else {
+            const smallStraightScore = calculateSmallStraightScore(mapDiceStateToDiceValueArray(diceStates))
+            if (smallStraightScore !== null) {
+                const newState = {...smallStraight}
+                newState.score = smallStraightScore
+                setSmallStraight(newState)
             }
         }
-
-        for (const [key, count] of counterMap) {
-            if (count < 2) {
-                counterMap.delete(key);
-            }
-        }
-
-
-        return counterMap
     }
 
-    function handleSetNumberOfSame(minimumNumberOfSameValue) {
-        const largestOfSameValue = findLargestOfSameValue(minimumNumberOfSameValue)
-
-        if (largestOfSameValue) {
-            let score;
-            let setter
-            switch (minimumNumberOfSameValue) {
-                case 3:
-                    score = largestOfSameValue * 3
-                    setter = setThreeSame
-                    break;
-                case 4:
-                    score = largestOfSameValue * 4
-                    setter = setFourSame
-                default:
-                    setter = () => undefined
-                    score = 0
+    function handleSetLargeStraight(discard) {
+        if (discard) {
+            handleDiscard({...discard}, (obj) => setLargeStraight(obj))
+        } else {
+            const largeStraightScore = calculateLargeStraightScore(mapDiceStateToDiceValueArray(diceStates))
+            if (largeStraightScore !== null) {
+                const newState = {...largeStraight}
+                newState.score = largeStraightScore
+                setLargeStraight(newState)
             }
         }
-        setter(score)
     }
 
-    function findLargestOfSameValue(minimumNumberOfSameValue) {
-        const counterMap = new Map()
-
-        for (const dice of diceStates) {
-            if (!counterMap.has(dice.value)) {
-                counterMap.set(dice.value, 1)
-            } else {
-                counterMap.set(dice.value, counterMap.get(dice.value) + 1)
-            }
+    function handleSetChance(discard) {
+        if (discard) {
+            handleDiscard({...discard}, (obj) => setChance(obj))
+        } else {
+            const chanceScore = calculateChanceScore(diceStates);
+            const newState = {...chance}
+            newState.score = chanceScore
+            setChance(newState);
         }
-
-        for (const [key, count] of counterMap) {
-            if (count < minimumNumberOfSameValue) {
-                counterMap.delete(key);
-            }
-        }
-
-        if (counterMap.size > 0) {
-            return Math.max({...counterMap.keys()});
-        }
-
-        return null
     }
+
+    function handleSetYatzy(discard) {
+        if (discard) {
+            handleDiscard({...discard}, (obj) => setYatzy(obj))
+        } else {
+            const yatzyScore = calculateYatzyScore(diceStates)
+            if (yatzyScore !== null) {
+                const newState = {...yatzy}
+                newState.score = yatzyScore
+                setYatzy(newState)
+            }
+        }
+    }
+
+    function handleDiscard(obj, setterCallback) {
+        obj.discarded = true
+        setterCallback(obj)
+    }
+
+
 }
 
 const Context = createContext(null);

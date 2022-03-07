@@ -2,7 +2,7 @@ import React, {createContext, useContext, useEffect, useState} from "react";
 import {useDiceContext} from "./DiceContext";
 
 const initState = {
-    value: 0,
+    score: 0,
     locked: false,
     discarded: false,
 }
@@ -16,9 +16,9 @@ export const BonusContext = ({children}) => {
     const [sixes, setSixes] = useState(initState)
     const [bonusSum, setBonusSum] = useState(0)
 
-    const {diceStates} = useDiceContext()
+    const {diceStates, handleScoreChosen, hasRolled} = useDiceContext()
 
-    useEffect(updateSum, [ones, twos, threes, fours, fives]);
+    useEffect(handleScoreChange, [ones, twos, threes, fours, fives]);
 
     return (<Context.Provider value={{
         ones,
@@ -39,47 +39,52 @@ export const BonusContext = ({children}) => {
     </Context.Provider>)
 
     function handleSetChosenDiceValue(diceValue) {
-        const numberOfDiceMatching = diceStates.filter(dice => dice.value === diceValue)
-        const score = numberOfDiceMatching.length * diceValue
+        if (hasRolled) {
 
-        let newObjToManipulate;
-        let setter;
 
-        switch (diceValue) {
-            case 1:
-                newObjToManipulate = {...ones}
-                setter = setOnes
-                break;
-            case 2:
-                newObjToManipulate = {...twos}
-                setter = setTwos
-                break;
-            case 3:
-                newObjToManipulate = {...threes}
-                setter = setThrees
-                break;
-            case 4:
-                newObjToManipulate = {...fours}
-                setter = setFours
-                break;
-            case 5:
-                newObjToManipulate = {...fives}
-                setter = setFives
-                break;
-            case 6:
-                newObjToManipulate = {...sixes}
-                setter = setSixes
-                break;
-            default:
+            const numberOfDiceMatching = diceStates.filter(dice => dice.value === diceValue)
+            const score = numberOfDiceMatching.length * diceValue
+
+            let newObjToManipulate;
+            let setter;
+
+            switch (diceValue) {
+                case 1:
+                    newObjToManipulate = {...ones}
+                    setter = setOnes
+                    break;
+                case 2:
+                    newObjToManipulate = {...twos}
+                    setter = setTwos
+                    break;
+                case 3:
+                    newObjToManipulate = {...threes}
+                    setter = setThrees
+                    break;
+                case 4:
+                    newObjToManipulate = {...fours}
+                    setter = setFours
+                    break;
+                case 5:
+                    newObjToManipulate = {...fives}
+                    setter = setFives
+                    break;
+                case 6:
+                    newObjToManipulate = {...sixes}
+                    setter = setSixes
+                    break;
+                default:
+            }
+
+            newObjToManipulate.score = score
+            newObjToManipulate.locked = true
+            setter(newObjToManipulate)
         }
-
-        newObjToManipulate.value = score
-        newObjToManipulate.locked = true
-        setter(newObjToManipulate)
     }
 
-    function updateSum() {
-        setBonusSum(ones.value + twos.value + threes.value + fours.value + fives.value + sixes.value);
+    function handleScoreChange() {
+        handleScoreChosen();
+        setBonusSum(ones.score + twos.score + threes.score + fours.score + fives.score + sixes.score);
     }
 }
 
