@@ -1,15 +1,20 @@
 .app {
-    display: grid;
-    column-gap: 50px;
-    row-gap: 50px;
     height: 75vh;
-    width: 75%;
+    width: 35%;
     margin: auto;
 }
 
 .diceContainer {
-    grid-column-start: 0;
-    grid-row-start: 1;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
+}
+
+.rollContainer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.button {
+    width: 150px;
 }

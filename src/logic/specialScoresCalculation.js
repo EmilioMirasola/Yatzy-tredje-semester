@@ -1,3 +1,5 @@
+import {validateLargeStraight, validateSmallStraight, validateYatzy, validateTwoPairs} from "./specialScoresValidation";
+
 export function mapDicesToCount(dice) {
     const countMap = new Map()
 
@@ -20,7 +22,7 @@ export function findPairs(dice) {
 export function findHighestPairValue(dices) {
     return findPairs(dices)
         .map(entry => entry[0] * 2)
-        .reduce(((previousValue, currentValue) => currentValue > previousValue ? currentValue : previousValue))
+        .reduce(((previousValue, currentValue) => currentValue > previousValue ? currentValue : previousValue), 0)
 }
 
 
@@ -40,7 +42,17 @@ export function findLargestOfSameValue(dice, minimumNumberOfSameValue) {
     return null
 }
 
-export function findFullHouseScore(dice) {
+export function calculateLargestOfSameValueScore(dice, minimumNumberOfSameValue) {
+    const largestOfSameValue = findLargestOfSameValue(dice, minimumNumberOfSameValue)
+
+    if (largestOfSameValue) {
+        return largestOfSameValue * minimumNumberOfSameValue
+    }
+
+    return null
+}
+
+export function calculateFullHouseScore(dice) {
     const countMap = mapDicesToCount(dice)
 
     if (countMap.size === 2) {
@@ -56,7 +68,7 @@ export function findFullHouseScore(dice) {
 }
 
 export function calculateYatzyScore(dice) {
-    if (!rollIsYatzy(dice)) {
+    if (!validateYatzy(dice)) {
         return null;
     }
 
@@ -64,19 +76,11 @@ export function calculateYatzyScore(dice) {
 
 }
 
-export function calculateSmallStraightScore(dice) {
-    if (!isSmallStraight(dice)) {
-        return null;
-    }
-
+export function calculateSmallStraightScore() {
     return 15;
 }
 
 export function calculateLargeStraightScore(dice) {
-    if (!isLargeStraight(dice)) {
-        return null;
-    }
-
     return 20;
 }
 
@@ -85,22 +89,15 @@ export function calculateChanceScore(dice) {
     return diceValues.reduce((prevValue, currentValue) => prevValue + currentValue, 0)
 }
 
+export function calculateTwoPairsScore(dice) {
+    if (validateTwoPairs(dice)) {
+        const pairs = findPairs(dice)
+        return pairs.reduce((previousValue, currentValue) => previousValue + currentValue[0] * 2, 0)
+    }
+
+    return null
+}
+
 export function mapDiceStateToDiceValueArray(dice) {
     return dice.map(die => die.value)
-}
-
-
-function isSmallStraight(dice) {
-    const values = [1, 2, 3, 4, 5]
-    return values.every(value => dice.includes(value))
-}
-
-function isLargeStraight(dice) {
-    const values = [2, 3, 4, 5, 6]
-    return values.every(value => dice.includes(value))
-}
-
-function rollIsYatzy(dice) {
-    const mapped = dice.map(die => die.value)
-    return new Set(mapped).size === 1;
 }

@@ -1,5 +1,5 @@
-import {useDiceContext} from "./context/DiceContext";
-import "./dice.css"
+import {useDiceContext} from "../context/DiceContext";
+import "../views/dice.css"
 import {Fragment} from "react";
 
 export const Die = ({index}) => {

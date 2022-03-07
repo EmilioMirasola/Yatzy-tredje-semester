@@ -2,15 +2,15 @@ import {createContext, useContext, useEffect, useState} from "react";
 import {useDiceContext} from "./DiceContext";
 import {
     calculateChanceScore,
+    calculateFullHouseScore,
+    calculateLargestOfSameValueScore,
     calculateLargeStraightScore,
     calculateSmallStraightScore,
+    calculateTwoPairsScore,
     calculateYatzyScore,
-    findFullHouseScore,
     findHighestPairValue,
-    findLargestOfSameValue,
-    findPairs,
     mapDiceStateToDiceValueArray,
-    rollIsYatzy
+    validateYatzy
 } from "../logic/specialScoresCalculation";
 
 const initState = {
@@ -77,11 +77,7 @@ export const SpecialScoresContext = ({children}) => {
         if (discard) {
             handleDiscard(newTwoPairs, (obj) => setTwoPairs(obj))
         } else {
-            const pairs = findPairs(diceStates);
-
-            if (pairs.length > 1) {
-                newTwoPairs.score = pairs.reduce((previousValue, currentValue) => previousValue + currentValue[0] * 2, 0)
-            }
+            newTwoPairs.score = calculateTwoPairsScore(diceStates)
         }
 
         setTwoPairs(newTwoPairs)
@@ -106,10 +102,10 @@ export const SpecialScoresContext = ({children}) => {
         if (discard) {
             handleDiscard(newState, (obj) => setter(obj))
         } else {
-            const largestOfSameValue = findLargestOfSameValue(diceStates, minimumNumberOfSameValue)
+            const score = calculateLargestOfSameValueScore(diceStates, minimumNumberOfSameValue)
 
-            if (largestOfSameValue) {
-                newState.score = largestOfSameValue * minimumNumberOfSameValue
+            if (score) {
+                newState.score = score
             }
         }
         setter(newState)
@@ -117,10 +113,9 @@ export const SpecialScoresContext = ({children}) => {
 
     function handleSetFullHouse(discard) {
         if (discard) {
-            handleDiscard({...discard}, (obj) => setFullHouse(obj))
+            handleDiscard({...fullHouse}, (obj) => setFullHouse(obj))
         } else {
-
-            const score = findFullHouseScore(diceStates)
+            const score = calculateFullHouseScore(diceStates)
 
             const newState = {...fullHouse}
             newState.score = score;
@@ -131,7 +126,7 @@ export const SpecialScoresContext = ({children}) => {
 
     function handleSetSmallStraight(discard) {
         if (discard) {
-            handleDiscard({...discard}, (obj) => setSmallStraight(obj))
+            handleDiscard({...smallStraight}, (obj) => setSmallStraight(obj))
         } else {
             const smallStraightScore = calculateSmallStraightScore(mapDiceStateToDiceValueArray(diceStates))
             if (smallStraightScore !== null) {
@@ -144,7 +139,7 @@ export const SpecialScoresContext = ({children}) => {
 
     function handleSetLargeStraight(discard) {
         if (discard) {
-            handleDiscard({...discard}, (obj) => setLargeStraight(obj))
+            handleDiscard({...largeStraight}, (obj) => setLargeStraight(obj))
         } else {
             const largeStraightScore = calculateLargeStraightScore(mapDiceStateToDiceValueArray(diceStates))
             if (largeStraightScore !== null) {
@@ -157,7 +152,7 @@ export const SpecialScoresContext = ({children}) => {
 
     function handleSetChance(discard) {
         if (discard) {
-            handleDiscard({...discard}, (obj) => setChance(obj))
+            handleDiscard({...chance}, (obj) => setChance(obj))
         } else {
             const chanceScore = calculateChanceScore(diceStates);
             const newState = {...chance}
@@ -168,7 +163,7 @@ export const SpecialScoresContext = ({children}) => {
 
     function handleSetYatzy(discard) {
         if (discard) {
-            handleDiscard({...discard}, (obj) => setYatzy(obj))
+            handleDiscard({...yatzy}, (obj) => setYatzy(obj))
         } else {
             const yatzyScore = calculateYatzyScore(diceStates)
             if (yatzyScore !== null) {

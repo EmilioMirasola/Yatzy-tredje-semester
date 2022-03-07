@@ -7,7 +7,7 @@ export const TotalScoreContext = ({children}) => {
     const {specialScoresSum} = useSpecialScoresContext();
     const {bonusSum} = useBonusContext()
 
-    useEffect(() => setTotal(bonusSum + specialScoresSum), [bonusSum, specialScoresSum])
+    useEffect(() => setTotal(bonusSum + specialScoresSum + (bonusSum >= 63 ? 50 : 0)), [bonusSum, specialScoresSum])
 
     return (
         <Context.Provider value={{

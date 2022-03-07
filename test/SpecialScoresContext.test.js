@@ -1,9 +1,9 @@
-import {findFullHouseScore, mapDicesToCount} from "../src/logic/specialScoresCalculation";
+import {calculateFullHouseScore, mapDicesToCount} from "../src/logic/specialScoresCalculation";
 
 describe("Yatzy calculation methods", () => {
 
     test("Tests full house calculation", () => {
-        const score = findFullHouseScore([1, 1, 1, 5, 5])
+        const score = calculateFullHouseScore([1, 1, 1, 5, 5])
 
         expect(score).toBe(13);
     })

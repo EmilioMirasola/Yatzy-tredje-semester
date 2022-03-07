@@ -1,8 +1,8 @@
 .dice {
     border: 2px solid black;
     text-align: center;
-    height: 150px;
-    width: 150px;
+    height: 100px;
+    width: 100px;
     display: flex;
     align-items: center;
     justify-content: center;

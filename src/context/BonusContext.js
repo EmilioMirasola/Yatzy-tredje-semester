@@ -1,5 +1,7 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import {useDiceContext} from "./DiceContext";
+import {mapDiceStateToDiceValueArray} from "../logic/specialScoresCalculation";
+import {calculateDieValueScore} from "../logic/bonusScoresCalculation";
 
 const initState = {
     score: 0,
@@ -18,10 +20,11 @@ export const BonusContext = ({children}) => {
 
     const {diceStates, handleScoreChosen, hasRolled} = useDiceContext()
 
-    useEffect(handleScoreChange, [ones, twos, threes, fours, fives]);
+    useEffect(handleScoreChange, [ones, twos, threes, fours, fives, sixes]);
 
     return (<Context.Provider value={{
         ones,
+        setOnes,
         twos,
         setTwos,
         threes,
@@ -38,48 +41,53 @@ export const BonusContext = ({children}) => {
         {children}
     </Context.Provider>)
 
-    function handleSetChosenDiceValue(diceValue) {
-        if (hasRolled) {
+    function handleSetChosenDiceValue(diceValue, discard) {
 
+        const score = calculateDieValueScore(diceStates, diceValue)
 
-            const numberOfDiceMatching = diceStates.filter(dice => dice.value === diceValue)
-            const score = numberOfDiceMatching.length * diceValue
+        let newObjToManipulate;
+        let setterFunction;
 
-            let newObjToManipulate;
-            let setter;
+        switch (diceValue) {
+            case 1:
+                newObjToManipulate = {...ones}
+                setterFunction = setOnes
+                break;
+            case 2:
+                newObjToManipulate = {...twos}
+                setterFunction = setTwos
+                break;
+            case 3:
+                newObjToManipulate = {...threes}
+                setterFunction = setThrees
+                break;
+            case 4:
+                newObjToManipulate = {...fours}
+                setterFunction = setFours
+                break;
+            case 5:
+                newObjToManipulate = {...fives}
+                setterFunction = setFives
+                break;
+            case 6:
+                newObjToManipulate = {...sixes}
+                setterFunction = setSixes
+                break;
+            default:
+        }
 
-            switch (diceValue) {
-                case 1:
-                    newObjToManipulate = {...ones}
-                    setter = setOnes
-                    break;
-                case 2:
-                    newObjToManipulate = {...twos}
-                    setter = setTwos
-                    break;
-                case 3:
-                    newObjToManipulate = {...threes}
-                    setter = setThrees
-                    break;
-                case 4:
-                    newObjToManipulate = {...fours}
-                    setter = setFours
-                    break;
-                case 5:
-                    newObjToManipulate = {...fives}
-                    setter = setFives
-                    break;
-                case 6:
-                    newObjToManipulate = {...sixes}
-                    setter = setSixes
-                    break;
-                default:
-            }
-
+        if (discard) {
+            handleDiscard(newObjToManipulate, setterFunction)
+        } else {
             newObjToManipulate.score = score
             newObjToManipulate.locked = true
-            setter(newObjToManipulate)
+            setterFunction(newObjToManipulate)
         }
+    }
+
+    function handleDiscard(diceState, setterFunction) {
+        diceState.discarded = true
+        setterFunction(diceState)
     }
 
     function handleScoreChange() {
