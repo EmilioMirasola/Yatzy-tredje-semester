@@ -1,27 +1,21 @@
 import {ScoreBox} from "../ScoreBox";
 import {DiscardButton} from "../../DiscardButton";
-import {hasFieldBeenChosenPreviously} from "../../../logic/specialScoresValidation";
 import {useIsScoreAvailableToChoose} from "../../../hooks/useIsScoreAvailableToChoose";
-import {useDiceContext} from "../../../context/DiceContext";
 import {useBonusContext} from "../../../context/BonusContext";
 import {validateDiceContains} from "../../../logic/bonusScoresValidation";
 import {calculateDieValueScore} from "../../../logic/bonusScoresCalculation";
 
 export const Fives = () => {
     const {fives, handleSetChosenDiceValue} = useBonusContext()
-    const {hasRolled} = useDiceContext()
     const [isAvailable, possibleScore] = useIsScoreAvailableToChoose(fives, handleValidation, handleScoreCalculation)
 
     return (
         <ScoreBox
             onChosen={() => isAvailable && handleSetChosenDiceValue(5)}
-            discarded={fives.discarded}
+            isAvailable={isAvailable}
+            value={fives}
         >
-            <div
-                style={{
-                    color: !hasRolled && !hasFieldBeenChosenPreviously(fives) ? "black" : null,
-                }}
-                className={hasFieldBeenChosenPreviously(fives) ? "used" : isAvailable ? "available" : "unavailable"}>
+            <div>
                 5-s
             </div>
             <div>{fives.score}</div>

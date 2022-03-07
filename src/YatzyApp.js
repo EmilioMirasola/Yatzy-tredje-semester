@@ -4,17 +4,15 @@ import React from "react";
 import {Dice} from "./views/Dice";
 import {BonusScores} from "./views/BonusScores";
 import {SpecialScores} from "./views/SpecialScores";
-import {useTotalScoreContext} from "./context/TotalScoreContext";
+import {Sum} from "./components/scoreComponents/Sum";
 
 
-function YatzyApp() {
-
-    const {total} = useTotalScoreContext()
+export const YatzyApp = () => {
 
     return (
         <div className="app">
             <Dice/>
-            <div>
+            <div className={"grid"}>
                 <h5>Type</h5>
                 <h5>Score</h5>
                 <h5>Possible score</h5>
@@ -22,9 +20,7 @@ function YatzyApp() {
             </div>
             <BonusScores/>
             <SpecialScores/>
-            {total}
+            <Sum/>
         </div>
     );
 }
-
-export default YatzyApp;

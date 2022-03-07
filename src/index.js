@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import YatzyApp from './YatzyApp';
+import {YatzyApp} from './YatzyApp';
 import {DiceContext} from "./context/DiceContext";
 import {SpecialScoresContext} from "./context/SpecialScoresContext";
 import {BonusContext} from "./context/BonusContext";

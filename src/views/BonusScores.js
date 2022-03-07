@@ -1,4 +1,3 @@
-import {useBonusContext} from "../context/BonusContext";
 import "../components/scoreComponents/bonusScores/bonus.css"
 import {Ones} from "../components/scoreComponents/bonusScores/Ones";
 import {Twos} from "../components/scoreComponents/bonusScores/Twos";
@@ -9,7 +8,6 @@ import {Sixes} from "../components/scoreComponents/bonusScores/Sixes";
 import {Fragment} from "react";
 
 export const BonusScores = () => {
-    const {bonusSum} = useBonusContext()
 
     return (
         <Fragment>
@@ -19,18 +17,6 @@ export const BonusScores = () => {
             <Fours/>
             <Fives/>
             <Sixes/>
-
-            <div>
-                <div>
-                    <div>
-                        Sum: {bonusSum}
-                    </div>
-
-                    <div>
-                        Bonus: {bonusSum >= 63 ? 50 : 0}
-                    </div>
-                </div>
-            </div>
         </Fragment>
     );
 }

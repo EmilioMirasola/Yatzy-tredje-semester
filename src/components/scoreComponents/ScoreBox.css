@@ -1,4 +1,11 @@
-
 .discarded {
     text-decoration: line-through;
+}
+
+.border {
+    border-top: 1px solid black;
+}
+
+.padding {
+    padding: 2px
 }

@@ -1,5 +1,5 @@
 .app {
-    height: 75vh;
+    padding-top: 10px;
     width: 35%;
     margin: auto;
 }
@@ -17,4 +17,14 @@
 
 .button {
     width: 150px;
+}
+
+.sumContainer {
+    position: absolute;
+}
+
+.bonusAndSumContainer {
+    display: flex;
+    width: 150px;
+    justify-content: space-between;
 }

@@ -7,12 +7,13 @@ import {SmallStraight} from "../components/scoreComponents/specialScores/SmallSt
 import {LargeStraight} from "../components/scoreComponents/specialScores/LargeStraight";
 import {Chance} from "../components/scoreComponents/specialScores/Chance";
 import {Yatzy} from "../components/scoreComponents/specialScores/Yatzy";
+import {Fragment} from "react";
 
 
 export const SpecialScores = () => {
 
     return (
-        <div>
+        <Fragment>
             <OnePair/>
             <TwoPairs/>
             <ThreeSame/>
@@ -22,7 +23,7 @@ export const SpecialScores = () => {
             <LargeStraight/>
             <Chance/>
             <Yatzy/>
-        </div>);
+        </Fragment>);
 
 }
 

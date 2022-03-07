@@ -9,3 +9,8 @@
 .unavailable {
     color: indianred;
 }
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
