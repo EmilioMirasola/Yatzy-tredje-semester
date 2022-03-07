@@ -1,13 +1,10 @@
 .used {
-    color: darkgray;
+    color: #595959;
+    opacity: 50%;
 }
 
 .available {
-    color: green;
-}
-
-.unavailable {
-    color: indianred;
+    color: #83b9b7;
 }
 
 .grid {

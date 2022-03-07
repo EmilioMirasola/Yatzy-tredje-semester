@@ -1,5 +1,6 @@
 .discarded {
     text-decoration: line-through;
+    color: #E1795E
 }
 
 .border {
@@ -8,4 +9,8 @@
 
 .padding {
     padding: 2px
+}
+
+.cursor {
+    cursor: pointer;
 }

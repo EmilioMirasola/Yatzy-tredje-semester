@@ -11,7 +11,7 @@ export const Twos = () => {
 
     return (
         <ScoreBox
-            onChosen={() => isAvailable && handleSetChosenDiceValue(1)}
+            onChosen={() => isAvailable && handleSetChosenDiceValue(2)}
             isAvailable={isAvailable}
             value={twos}
         >

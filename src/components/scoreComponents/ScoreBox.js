@@ -1,19 +1,22 @@
 import "./ScoreBox.css"
 import {useDiceContext} from "../../context/DiceContext";
 import {hasFieldBeenChosenPreviously} from "../../logic/specialScoresValidation";
+import {useMemo} from "react";
 
 export const ScoreBox = ({onChosen, value, children, isAvailable}) => {
     const {hasRolled} = useDiceContext()
+    const hasBeenChosen = useMemo(() => hasFieldBeenChosenPreviously(value), [value])
 
     return (
         <div
             onClick={onChosen}
-            style={{color: !hasRolled && value && !hasFieldBeenChosenPreviously(value) ? "black" : null,}}
+            style={{color: !hasRolled && !hasBeenChosen ? "black" : null,}}
             className={`
-            ${value && value.discarded ? "discarded" : ""} 
-            ${value && hasFieldBeenChosenPreviously(value) ? "used" : isAvailable ? "available" : "unavailable"} 
+            ${value.discarded && "discarded"} 
+            ${hasBeenChosen && "used"} 
+            ${!hasBeenChosen && isAvailable && "available"} 
+            ${!hasBeenChosen && isAvailable && "cursor"}
             border grid padding`
-
             }
         >
             {children}
