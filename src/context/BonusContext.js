@@ -1,6 +1,5 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import {useDiceContext} from "./DiceContext";
-import {mapDiceStateToDiceValueArray} from "../logic/specialScoresCalculation";
 import {calculateDieValueScore} from "../logic/bonusScoresCalculation";
 
 const initState = {
@@ -18,7 +17,7 @@ export const BonusContext = ({children}) => {
     const [sixes, setSixes] = useState(initState)
     const [bonusSum, setBonusSum] = useState(0)
 
-    const {diceStates, handleScoreChosen, hasRolled} = useDiceContext()
+    const {diceStates, handleScoreChosen} = useDiceContext()
 
     useEffect(handleScoreChange, [ones, twos, threes, fours, fives, sixes]);
 
