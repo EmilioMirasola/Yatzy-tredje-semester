@@ -4,14 +4,15 @@ import {useIsScoreAvailableToChoose} from "../../../hooks/useIsScoreAvailableToC
 import {useBonusContext} from "../../../context/BonusContext";
 import {validateDiceContains} from "../../../logic/validation/bonusScoresValidation";
 import {calculateDieValueScore} from "../../../logic/calculation/bonusScoresCalculation";
+import {mutateDiscard, mutateScore} from "../../../logic/mutation/scoreMutation";
 
 export const Sixes = () => {
-    const {sixes, handleSetChosenDiceValue} = useBonusContext()
+    const {sixes, setSixes} = useBonusContext()
     const [isAvailable, possibleScore] = useIsScoreAvailableToChoose(sixes, handleValidation, handleScoreCalculation)
 
     return (
         <ScoreBox
-            onChosen={() => isAvailable && handleSetChosenDiceValue(6)}
+            onChosen={() => isAvailable && handleSetFives()}
             value={sixes}
             isAvailable={isAvailable}
         >
@@ -19,9 +20,19 @@ export const Sixes = () => {
             <div>{sixes.score}</div>
             <div>{isAvailable && possibleScore}</div>
             <DiscardButton value={sixes}
-                           onClick={() => handleSetChosenDiceValue(6, true)}/>
+                           onClick={handleDiscard}/>
         </ScoreBox>
     );
+
+    function handleSetFives() {
+        const newState = mutateScore(sixes, possibleScore)
+        setSixes(newState)
+    }
+
+    function handleDiscard() {
+        const newState = mutateDiscard(sixes)
+        setSixes(newState)
+    }
 }
 
 function handleValidation(dice) {

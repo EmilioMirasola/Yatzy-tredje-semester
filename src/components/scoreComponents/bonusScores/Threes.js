@@ -4,14 +4,15 @@ import {useIsScoreAvailableToChoose} from "../../../hooks/useIsScoreAvailableToC
 import {useBonusContext} from "../../../context/BonusContext";
 import {validateDiceContains} from "../../../logic/validation/bonusScoresValidation";
 import {calculateDieValueScore} from "../../../logic/calculation/bonusScoresCalculation";
+import {mutateDiscard, mutateScore} from "../../../logic/mutation/scoreMutation";
 
 export const Threes = () => {
-    const {threes, handleSetChosenDiceValue} = useBonusContext()
+    const {threes, setThrees} = useBonusContext()
     const [isAvailable, possibleScore] = useIsScoreAvailableToChoose(threes, handleValidation, handleScoreCalculation)
 
     return (
         <ScoreBox
-            onChosen={() => isAvailable && handleSetChosenDiceValue(3)}
+            onChosen={() => isAvailable && handleSetThrees()}
             isAvailable={isAvailable}
             value={threes}
         >
@@ -20,9 +21,19 @@ export const Threes = () => {
             </div>
             <div>{threes.score}</div>
             <div>{isAvailable && possibleScore}</div>
-            <DiscardButton value={threes} onClick={() => handleSetChosenDiceValue(3, true)}/>
+            <DiscardButton value={threes} onClick={handleDiscard}/>
         </ScoreBox>
     );
+
+    function handleSetThrees() {
+        const newState = mutateScore(threes, possibleScore)
+        setThrees(newState)
+    }
+
+    function handleDiscard() {
+        const newState = mutateDiscard(threes)
+        setThrees(newState)
+    }
 }
 
 function handleValidation(dice) {

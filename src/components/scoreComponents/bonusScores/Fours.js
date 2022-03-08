@@ -4,14 +4,15 @@ import {useIsScoreAvailableToChoose} from "../../../hooks/useIsScoreAvailableToC
 import {useBonusContext} from "../../../context/BonusContext";
 import {validateDiceContains} from "../../../logic/validation/bonusScoresValidation";
 import {calculateDieValueScore} from "../../../logic/calculation/bonusScoresCalculation";
+import {mutateDiscard, mutateScore} from "../../../logic/mutation/scoreMutation";
 
 export const Fours = () => {
-    const {fours, handleSetChosenDiceValue} = useBonusContext()
+    const {fours, setFours} = useBonusContext()
     const [isAvailable, possibleScore] = useIsScoreAvailableToChoose(fours, handleValidation, handleScoreCalculation)
 
     return (
         <ScoreBox
-            onChosen={() => isAvailable && handleSetChosenDiceValue(4)}
+            onChosen={() => isAvailable && handleSetFours()}
             isAvailable={isAvailable}
             value={fours}
         >
@@ -20,9 +21,19 @@ export const Fours = () => {
             </div>
             <div>{fours.score}</div>
             <div>{isAvailable && possibleScore}</div>
-            <DiscardButton value={fours} onClick={() => handleSetChosenDiceValue(4, true)}/>
+            <DiscardButton value={fours} onClick={handleDiscard}/>
         </ScoreBox>
     );
+
+    function handleSetFours() {
+        const newState = mutateScore(fours, possibleScore)
+        setFours(newState)
+    }
+
+    function handleDiscard() {
+        const newState = mutateDiscard(fours)
+        setFours(newState)
+    }
 }
 
 function handleValidation(dice) {

@@ -1,10 +1,8 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import {useDiceContext} from "./DiceContext";
-import {calculateDieValueScore} from "../logic/calculation/bonusScoresCalculation";
 
 const initState = {
     score: 0,
-    locked: false,
     discarded: false,
 }
 
@@ -17,7 +15,7 @@ export const BonusContext = ({children}) => {
     const [sixes, setSixes] = useState(initState)
     const [bonusSum, setBonusSum] = useState(0)
 
-    const {diceStates, handleScoreChosen} = useDiceContext()
+    const {handleScoreChosen} = useDiceContext()
 
     useEffect(handleScoreChange, [ones, twos, threes, fours, fives, sixes]);
 
@@ -34,60 +32,10 @@ export const BonusContext = ({children}) => {
         setFives,
         sixes,
         setSixes,
-        handleSetChosenDiceValue,
         bonusSum
     }}>
         {children}
     </Context.Provider>)
-
-    function handleSetChosenDiceValue(diceValue, discard) {
-
-        const score = calculateDieValueScore(diceStates, diceValue)
-
-        let newObjToManipulate;
-        let setterFunction;
-
-        switch (diceValue) {
-            case 1:
-                newObjToManipulate = {...ones}
-                setterFunction = setOnes
-                break;
-            case 2:
-                newObjToManipulate = {...twos}
-                setterFunction = setTwos
-                break;
-            case 3:
-                newObjToManipulate = {...threes}
-                setterFunction = setThrees
-                break;
-            case 4:
-                newObjToManipulate = {...fours}
-                setterFunction = setFours
-                break;
-            case 5:
-                newObjToManipulate = {...fives}
-                setterFunction = setFives
-                break;
-            case 6:
-                newObjToManipulate = {...sixes}
-                setterFunction = setSixes
-                break;
-            default:
-        }
-
-        if (discard) {
-            handleDiscard(newObjToManipulate, setterFunction)
-        } else {
-            newObjToManipulate.score = score
-            newObjToManipulate.locked = true
-            setterFunction(newObjToManipulate)
-        }
-    }
-
-    function handleDiscard(diceState, setterFunction) {
-        diceState.discarded = true
-        setterFunction(diceState)
-    }
 
     function handleScoreChange() {
         handleScoreChosen();
