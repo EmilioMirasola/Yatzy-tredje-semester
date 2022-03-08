@@ -1,5 +1,4 @@
 .dice {
-    border: 2px solid black;
     text-align: center;
     height: 100px;
     width: 100px;
@@ -14,4 +13,8 @@ h1 {
 
 .hold {
     border: 5px solid black;
+}
+
+.released {
+    border: 5px solid #83b9b7;
 }

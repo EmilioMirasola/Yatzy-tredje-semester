@@ -7,7 +7,7 @@ export const Die = ({index}) => {
 
     return (
         <Fragment>
-            <div className={`dice ${isDiceBeingHold() ? "hold " : ""}`} onClick={handleHold}>
+            <div className={`dice ${isDiceBeingHold() ? "hold " : "released"}`} onClick={handleHold}>
                 <h1>
                     {!hasRolled ? "?" : diceStates[index].value}
                 </h1>
