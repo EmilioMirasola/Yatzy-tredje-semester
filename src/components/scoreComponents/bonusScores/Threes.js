@@ -2,8 +2,8 @@ import {ScoreBox} from "../ScoreBox";
 import {DiscardButton} from "../../DiscardButton";
 import {useIsScoreAvailableToChoose} from "../../../hooks/useIsScoreAvailableToChoose";
 import {useBonusContext} from "../../../context/BonusContext";
-import {validateDiceContains} from "../../../logic/bonusScoresValidation";
-import {calculateDieValueScore} from "../../../logic/bonusScoresCalculation";
+import {validateDiceContains} from "../../../logic/validation/bonusScoresValidation";
+import {calculateDieValueScore} from "../../../logic/calculation/bonusScoresCalculation";
 
 export const Threes = () => {
     const {threes, handleSetChosenDiceValue} = useBonusContext()

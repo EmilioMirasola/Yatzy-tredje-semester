@@ -3,7 +3,7 @@ import {
     findPairs,
     mapDiceStateToDiceValueArray,
     mapDicesToCount
-} from "./specialScoresCalculation";
+} from "../calculation/specialScoresCalculation";
 
 export function canSetScore(objToCheck, hasRolled) {
     return hasRolled && objToCheck.discarded !== true && objToCheck.score === 0

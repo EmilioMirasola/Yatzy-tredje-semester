@@ -1,9 +1,9 @@
 import {ScoreBox} from "../ScoreBox";
 import {DiscardButton} from "../../DiscardButton";
 import {useSpecialScoresContext} from "../../../context/SpecialScoresContext";
-import {validateFullHouse} from "../../../logic/specialScoresValidation";
+import {validateFullHouse} from "../../../logic/validation/specialScoresValidation";
 import {useIsScoreAvailableToChoose} from "../../../hooks/useIsScoreAvailableToChoose";
-import {calculateFullHouseScore} from "../../../logic/specialScoresCalculation";
+import {calculateFullHouseScore} from "../../../logic/calculation/specialScoresCalculation";
 
 export const FullHouse = () => {
     const {fullHouse, handleSetFullHouse} = useSpecialScoresContext()

@@ -1,9 +1,9 @@
 import {ScoreBox} from "../ScoreBox";
 import {DiscardButton} from "../../DiscardButton";
 import {useSpecialScoresContext} from "../../../context/SpecialScoresContext";
-import {validateYatzy} from "../../../logic/specialScoresValidation";
+import {validateYatzy} from "../../../logic/validation/specialScoresValidation";
 import {useIsScoreAvailableToChoose} from "../../../hooks/useIsScoreAvailableToChoose";
-import {calculateYatzyScore} from "../../../logic/specialScoresCalculation";
+import {calculateYatzyScore} from "../../../logic/calculation/specialScoresCalculation";
 
 export const Yatzy = () => {
     const {yatzy, handleSetYatzy} = useSpecialScoresContext()

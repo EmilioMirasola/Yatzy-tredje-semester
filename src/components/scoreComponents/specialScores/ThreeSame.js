@@ -1,9 +1,9 @@
 import {ScoreBox} from "../ScoreBox";
 import {DiscardButton} from "../../DiscardButton";
 import {useSpecialScoresContext} from "../../../context/SpecialScoresContext";
-import {validateNumberOfSameValues} from "../../../logic/specialScoresValidation";
+import {validateNumberOfSameValues} from "../../../logic/validation/specialScoresValidation";
 import {useIsScoreAvailableToChoose} from "../../../hooks/useIsScoreAvailableToChoose";
-import {calculateLargestOfSameValueScore} from "../../../logic/specialScoresCalculation";
+import {calculateLargestOfSameValueScore} from "../../../logic/calculation/specialScoresCalculation";
 
 export const ThreeSame = () => {
     const {threeSame, handleSetNumberOfSame} = useSpecialScoresContext()

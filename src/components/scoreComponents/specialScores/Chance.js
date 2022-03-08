@@ -2,7 +2,7 @@ import {ScoreBox} from "../ScoreBox";
 import {DiscardButton} from "../../DiscardButton";
 import {useSpecialScoresContext} from "../../../context/SpecialScoresContext";
 import {useIsScoreAvailableToChoose} from "../../../hooks/useIsScoreAvailableToChoose";
-import {calculateChanceScore} from "../../../logic/specialScoresCalculation";
+import {calculateChanceScore} from "../../../logic/calculation/specialScoresCalculation";
 
 export const Chance = () => {
     const {chance, handleSetChance} = useSpecialScoresContext()

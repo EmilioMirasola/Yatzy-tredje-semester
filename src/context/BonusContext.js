@@ -1,10 +1,9 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import {useDiceContext} from "./DiceContext";
-import {calculateDieValueScore} from "../logic/bonusScoresCalculation";
+import {calculateDieValueScore} from "../logic/calculation/bonusScoresCalculation";
 
 const initState = {
     score: 0,
-    locked: false,
     discarded: false,
 }
 
@@ -23,17 +22,11 @@ export const BonusContext = ({children}) => {
 
     return (<Context.Provider value={{
         ones,
-        setOnes,
         twos,
-        setTwos,
         threes,
-        setThrees,
         fours,
-        setFours,
         fives,
-        setFives,
         sixes,
-        setSixes,
         handleSetChosenDiceValue,
         bonusSum
     }}>
