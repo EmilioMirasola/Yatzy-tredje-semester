@@ -1,4 +1,4 @@
-import {calculateFullHouseScore, mapDicesToCount} from "../src/logic/specialScoresCalculation";
+import {calculateFullHouseScore, mapDicesToCount} from "../src/logic/calculation/specialScoresCalculation";
 
 describe("Yatzy calculation methods", () => {
 

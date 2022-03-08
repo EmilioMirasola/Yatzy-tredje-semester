@@ -1,4 +1,4 @@
-import {validateLargeStraight, validateSmallStraight, validateYatzy, validateTwoPairs} from "./specialScoresValidation";
+import {validateTwoPairs, validateYatzy} from "../validation/specialScoresValidation";
 
 export function mapDicesToCount(dice) {
     const countMap = new Map()

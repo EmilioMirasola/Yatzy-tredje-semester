@@ -1,4 +1,4 @@
-import {mapDiceStateToDiceValueArray} from "./specialScoresCalculation";
+import {mapDiceStateToDiceValueArray} from "../calculation/specialScoresCalculation";
 
 export function validateDiceContains(dice, value) {
     const diceArray = mapDiceStateToDiceValueArray(dice)

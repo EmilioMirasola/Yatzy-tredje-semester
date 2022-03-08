@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import {useDiceContext} from "./DiceContext";
-import {calculateDieValueScore} from "../logic/bonusScoresCalculation";
+import {calculateDieValueScore} from "../logic/calculation/bonusScoresCalculation";
 
 const initState = {
     score: 0,

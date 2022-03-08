@@ -1,9 +1,9 @@
 import {ScoreBox} from "../ScoreBox";
 import {DiscardButton} from "../../DiscardButton";
 import {useSpecialScoresContext} from "../../../context/SpecialScoresContext";
-import {validateOnePair} from "../../../logic/specialScoresValidation";
+import {validateOnePair} from "../../../logic/validation/specialScoresValidation";
 import {useIsScoreAvailableToChoose} from "../../../hooks/useIsScoreAvailableToChoose";
-import {findHighestPairValue} from "../../../logic/specialScoresCalculation";
+import {findHighestPairValue} from "../../../logic/calculation/specialScoresCalculation";
 
 export const OnePair = () => {
     const {onePair, handleSetOnePair} = useSpecialScoresContext()

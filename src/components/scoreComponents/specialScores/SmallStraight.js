@@ -1,9 +1,9 @@
 import {ScoreBox} from "../ScoreBox";
 import {DiscardButton} from "../../DiscardButton";
 import {useSpecialScoresContext} from "../../../context/SpecialScoresContext";
-import {validateSmallStraight} from "../../../logic/specialScoresValidation";
+import {validateSmallStraight} from "../../../logic/validation/specialScoresValidation";
 import {useIsScoreAvailableToChoose} from "../../../hooks/useIsScoreAvailableToChoose";
-import {calculateSmallStraightScore, mapDiceStateToDiceValueArray} from "../../../logic/specialScoresCalculation";
+import {calculateSmallStraightScore, mapDiceStateToDiceValueArray} from "../../../logic/calculation/specialScoresCalculation";
 
 export const SmallStraight = () => {
     const {smallStraight, handleSetSmallStraight} = useSpecialScoresContext()

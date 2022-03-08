@@ -11,7 +11,7 @@ import {
     findHighestPairValue,
     mapDiceStateToDiceValueArray,
     validateYatzy
-} from "../logic/specialScoresCalculation";
+} from "../logic/calculation/specialScoresCalculation";
 
 const initState = {
     score: 0, discarded: false,

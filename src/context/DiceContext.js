@@ -20,8 +20,7 @@ export const DiceContext = ({children}) => {
             handleScoreChosen,
             hasRolled,
             rollDices,
-            holdDice,
-            releaseDice
+            toggleHold
         }}>
             {children}
         </Context.Provider>
@@ -45,16 +44,9 @@ export const DiceContext = ({children}) => {
         }
     }
 
-    function holdDice(diceIndex) {
+    function toggleHold(diceIndex) {
         const newStateArray = [...diceStates];
-        newStateArray[diceIndex].hold = true;
-
-        setDiceStates(newStateArray);
-    }
-
-    function releaseDice(diceIndex) {
-        const newStateArray = [...diceStates];
-        newStateArray[diceIndex].hold = false;
+        newStateArray[diceIndex].hold = !newStateArray[diceIndex].hold;
 
         setDiceStates(newStateArray);
     }

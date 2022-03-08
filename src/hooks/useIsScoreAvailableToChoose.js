@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {hasFieldBeenChosenPreviously} from "../logic/specialScoresValidation";
+import {hasFieldBeenChosenPreviously} from "../logic/validation/specialScoresValidation";
 import {useDiceContext} from "../context/DiceContext";
 
 export const useIsScoreAvailableToChoose = (objectToCheck, validatorFunction, calculatePossibleScoreFunction) => {
