@@ -18,7 +18,7 @@ export const Die = ({index}) => {
     function handleHold() {
         if (isDiceBeingHold()) {
             releaseDice(index)
-        } else {
+        } else if (hasRolled) {
             holdDice(index)
         }
     }
