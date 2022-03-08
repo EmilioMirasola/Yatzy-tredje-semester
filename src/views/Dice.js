@@ -15,7 +15,7 @@ export const Dice = () => {
                 <Die index={4} key={4}/>
             </div>
             <div className={"rollContainer"}>
-                <h2>Antal rul tilbage {rollsLeft}</h2>
+                <h2>Rolls left {rollsLeft}</h2>
                 <button className={"button"} onClick={rollDices}>Roll</button>
             </div>
         </div>
