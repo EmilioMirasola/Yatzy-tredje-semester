@@ -1,12 +1,12 @@
-import React, {createContext, useContext, useEffect, useState} from "react";
-import {useDiceContext} from "./DiceContext";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { useDiceContext } from "./DiceContext";
 
 const initState = {
     score: 0,
     discarded: false,
 }
 
-export const BonusContext = ({children}) => {
+export const BonusContext = ({ children }) => {
     const [ones, setOnes] = useState(initState)
     const [twos, setTwos] = useState(initState)
     const [threes, setThrees] = useState(initState)
@@ -14,10 +14,14 @@ export const BonusContext = ({children}) => {
     const [fives, setFives] = useState(initState)
     const [sixes, setSixes] = useState(initState)
     const [bonusSum, setBonusSum] = useState(0)
+    const [allBonusScoresSet, setAllBonusScoresSet] = useState(false)
 
-    const {handleScoreChosen} = useDiceContext()
+    const { handleScoreChosen } = useDiceContext()
 
-    useEffect(handleScoreChange, [ones, twos, threes, fours, fives, sixes]);
+    useEffect(() => {
+        handleScoreChange()
+        checkIfAllScoresAreSet()
+    }, [ones, twos, threes, fours, fives, sixes]);
 
     return (<Context.Provider value={{
         ones,
@@ -32,6 +36,7 @@ export const BonusContext = ({children}) => {
         setFives,
         sixes,
         setSixes,
+        allBonusScoresSet,
         bonusSum
     }}>
         {children}
@@ -40,6 +45,13 @@ export const BonusContext = ({children}) => {
     function handleScoreChange() {
         handleScoreChosen();
         setBonusSum(ones.score + twos.score + threes.score + fours.score + fives.score + sixes.score);
+    }
+
+    function checkIfAllScoresAreSet() {
+        const states = [ones, twos, threes, fours, fives, sixes]
+
+        const allSet = states.every(state => state.score !== 0 || state.discarded)
+        setAllBonusScoresSet(allSet)
     }
 }
 

@@ -1,11 +1,11 @@
-import {createContext, useContext, useEffect, useState} from "react";
-import {useDiceContext} from "./DiceContext";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useDiceContext } from "./DiceContext";
 
 const initState = {
     score: 0, discarded: false,
 }
 
-export const SpecialScoresContext = ({children}) => {
+export const SpecialScoresContext = ({ children }) => {
     const [onePair, setOnePair] = useState(initState)
     const [twoPairs, setTwoPairs] = useState(initState)
     const [threeSame, setThreeSame] = useState(initState)
@@ -16,10 +16,14 @@ export const SpecialScoresContext = ({children}) => {
     const [chance, setChance] = useState(initState)
     const [yatzy, setYatzy] = useState(initState)
     const [specialScoresSum, setSpecialScoresSum] = useState(0)
+    const [allSpecialScoresSet, setAllSpecialScoresSet] = useState(false)
 
-    const {handleScoreChosen} = useDiceContext()
+    const { handleScoreChosen } = useDiceContext()
 
-    useEffect(handleScoreChange, [onePair, twoPairs, threeSame, fourSame, fullHouse, smallStraight, largeStraight, chance, yatzy])
+    useEffect(() => {
+        handleScoreChange();
+        checkIfAllScoresAreSet();
+    }, [onePair, twoPairs, threeSame, fourSame, fullHouse, smallStraight, largeStraight, chance, yatzy])
 
     return (
         <Context.Provider value={{
@@ -32,7 +36,8 @@ export const SpecialScoresContext = ({children}) => {
             largeStraight, setLargeStraight,
             chance, setChance,
             yatzy, setYatzy,
-            specialScoresSum
+            specialScoresSum,
+            allSpecialScoresSet
         }}>
             {children}
         </Context.Provider>)
@@ -40,6 +45,13 @@ export const SpecialScoresContext = ({children}) => {
     function handleScoreChange() {
         setSpecialScoresSum(onePair.score + twoPairs.score + threeSame.score + fourSame.score + fullHouse.score + smallStraight.score + largeStraight.score + chance.score + yatzy.score);
         handleScoreChosen()
+    }
+
+    function checkIfAllScoresAreSet() {
+        const states = [onePair, twoPairs, threeSame, fourSame, fullHouse, smallStraight, largeStraight, chance, yatzy, specialScoresSum]
+
+        const allSet = states.every(state => state.score !== 0 || state.discarded)
+        setAllSpecialScoresSet(allSet)
     }
 
 }

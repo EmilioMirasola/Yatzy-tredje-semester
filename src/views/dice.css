@@ -7,6 +7,10 @@
     justify-content: center;
 }
 
+.cursorAsPointer {
+    cursor: pointer;
+}
+
 h1 {
     vertical-align: middle;
 }
