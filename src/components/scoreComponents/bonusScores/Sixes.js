@@ -6,13 +6,13 @@ import {validateDiceContains} from "../../../logic/validation/bonusScoresValidat
 import {calculateDieValueScore} from "../../../logic/calculation/bonusScoresCalculation";
 import {mutateDiscard, mutateScore} from "../../../logic/mutation/scoreMutation";
 
-export const Sixes = () => {
+export const Sixes = ({onChosen}) => {
     const {sixes, setSixes} = useBonusContext()
     const [isAvailable, possibleScore] = useIsScoreAvailableToChoose(sixes, handleValidation, handleScoreCalculation)
 
     return (
         <ScoreBox
-            onChosen={() => isAvailable && handleSetFives()}
+            onChosen={() => isAvailable && onChosen(possibleScore)}
             value={sixes}
             isAvailable={isAvailable}
         >

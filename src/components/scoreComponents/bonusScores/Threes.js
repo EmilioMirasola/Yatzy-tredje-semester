@@ -6,13 +6,13 @@ import {validateDiceContains} from "../../../logic/validation/bonusScoresValidat
 import {calculateDieValueScore} from "../../../logic/calculation/bonusScoresCalculation";
 import {mutateDiscard, mutateScore} from "../../../logic/mutation/scoreMutation";
 
-export const Threes = () => {
+export const Threes = ({onChosen}) => {
     const {threes, setThrees} = useBonusContext()
     const [isAvailable, possibleScore] = useIsScoreAvailableToChoose(threes, handleValidation, handleScoreCalculation)
 
     return (
         <ScoreBox
-            onChosen={() => isAvailable && handleSetThrees()}
+            onChosen={() => isAvailable && onChosen(possibleScore)}
             isAvailable={isAvailable}
             value={threes}
         >
@@ -24,11 +24,6 @@ export const Threes = () => {
             <DiscardButton value={threes} onClick={handleDiscard}/>
         </ScoreBox>
     );
-
-    function handleSetThrees() {
-        const newState = mutateScore(threes, possibleScore)
-        setThrees(newState)
-    }
 
     function handleDiscard() {
         const newState = mutateDiscard(threes)

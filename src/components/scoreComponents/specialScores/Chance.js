@@ -3,15 +3,15 @@ import {DiscardButton} from "../../DiscardButton";
 import {useSpecialScoresContext} from "../../../context/SpecialScoresContext";
 import {useIsScoreAvailableToChoose} from "../../../hooks/useIsScoreAvailableToChoose";
 import {calculateChanceScore} from "../../../logic/calculation/specialScoresCalculation";
-import {mutateDiscard, mutateScore} from "../../../logic/mutation/scoreMutation";
+import {mutateDiscard} from "../../../logic/mutation/scoreMutation";
 
-export const Chance = () => {
+export const Chance = ({onChosen}) => {
     const {chance, setChance} = useSpecialScoresContext()
     const [isAvailable, possibleScore] = useIsScoreAvailableToChoose(chance, () => true, calculateChanceScore)
 
     return (
         <ScoreBox
-            onChosen={() => isAvailable && handleSetChance()}
+            onChosen={() => isAvailable && onChosen(possibleScore)}
             value={chance}
             isAvailable={isAvailable}
         >
@@ -21,11 +21,6 @@ export const Chance = () => {
             <DiscardButton value={chance} onClick={handleDiscard}/>
         </ScoreBox>
     );
-
-    function handleSetChance() {
-        const newState = mutateScore(chance, possibleScore)
-        setChance(newState)
-    }
 
     function handleDiscard() {
         const newState = mutateDiscard(chance)

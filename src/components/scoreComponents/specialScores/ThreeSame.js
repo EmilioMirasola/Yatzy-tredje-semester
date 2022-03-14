@@ -4,9 +4,9 @@ import {useSpecialScoresContext} from "../../../context/SpecialScoresContext";
 import {validateNumberOfSameValues} from "../../../logic/validation/specialScoresValidation";
 import {useIsScoreAvailableToChoose} from "../../../hooks/useIsScoreAvailableToChoose";
 import {calculateLargestOfSameValueScore} from "../../../logic/calculation/specialScoresCalculation";
-import {mutateDiscard, mutateScore} from "../../../logic/mutation/scoreMutation";
+import {mutateDiscard} from "../../../logic/mutation/scoreMutation";
 
-export const ThreeSame = () => {
+export const ThreeSame = ({onChosen}) => {
     const {threeSame, setThreeSame} = useSpecialScoresContext()
     const [isAvailable, possibleScore] = useIsScoreAvailableToChoose(threeSame,
         (dice) => validateNumberOfSameValues(dice, 3),
@@ -15,7 +15,7 @@ export const ThreeSame = () => {
 
     return (
         <ScoreBox
-            onChosen={() => isAvailable && handleSetThrees()}
+            onChosen={() => isAvailable && onChosen(possibleScore)}
             value={threeSame}
             isAvailable={isAvailable}
         >
@@ -25,11 +25,6 @@ export const ThreeSame = () => {
             <DiscardButton value={threeSame} onClick={handleDiscard}/>
         </ScoreBox>
     );
-
-    function handleSetThrees() {
-        const newState = mutateScore(threeSame, possibleScore)
-        setThreeSame(newState)
-    }
 
     function handleDiscard() {
         const newState = mutateDiscard(threeSame)

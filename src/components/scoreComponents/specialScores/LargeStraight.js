@@ -7,9 +7,9 @@ import {
     calculateLargeStraightScore,
     mapDiceStateToDiceValueArray
 } from "../../../logic/calculation/specialScoresCalculation";
-import {mutateDiscard, mutateScore} from "../../../logic/mutation/scoreMutation";
+import {mutateDiscard} from "../../../logic/mutation/scoreMutation";
 
-export const LargeStraight = () => {
+export const LargeStraight = ({onChosen}) => {
     const {largeStraight, setLargeStraight} = useSpecialScoresContext()
     const [isAvailable, possibleScore] = useIsScoreAvailableToChoose(largeStraight,
         (dice) => validateLargeStraight(mapDiceStateToDiceValueArray(dice)),
@@ -17,7 +17,7 @@ export const LargeStraight = () => {
 
     return (
         <ScoreBox
-            onChosen={() => isAvailable && handleSetLargeStraight()}
+            onChosen={() => isAvailable && onChosen(possibleScore)}
             value={largeStraight}
             isAvailable={isAvailable}
         >
@@ -27,12 +27,6 @@ export const LargeStraight = () => {
             <DiscardButton value={largeStraight} onClick={handleDiscard}/>
         </ScoreBox>
     );
-
-    function handleSetLargeStraight() {
-        const newState = mutateScore(largeStraight, possibleScore)
-        setLargeStraight(newState)
-    }
-
     function handleDiscard() {
         const newState = mutateDiscard(largeStraight)
         setLargeStraight(newState)

@@ -7,9 +7,9 @@ import {
     calculateSmallStraightScore,
     mapDiceStateToDiceValueArray
 } from "../../../logic/calculation/specialScoresCalculation";
-import {mutateDiscard, mutateScore} from "../../../logic/mutation/scoreMutation";
+import {mutateDiscard} from "../../../logic/mutation/scoreMutation";
 
-export const SmallStraight = () => {
+export const SmallStraight = ({onChosen}) => {
     const {smallStraight, setSmallStraight} = useSpecialScoresContext()
     const [isAvailable, possibleScore] = useIsScoreAvailableToChoose(smallStraight,
         (dice) => validateSmallStraight(mapDiceStateToDiceValueArray(dice)),
@@ -17,7 +17,7 @@ export const SmallStraight = () => {
 
     return (
         <ScoreBox
-            onChosen={() => isAvailable && handleSetSmallStraight()}
+            onChosen={() => isAvailable && onChosen(possibleScore)}
             value={smallStraight}
             isAvailable={isAvailable}
         >
@@ -27,11 +27,6 @@ export const SmallStraight = () => {
             <DiscardButton value={smallStraight} onClick={handleDiscard}/>
         </ScoreBox>
     );
-
-    function handleSetSmallStraight() {
-        const newState = mutateScore(smallStraight, possibleScore)
-        setSmallStraight(newState)
-    }
 
     function handleDiscard() {
         const newState = mutateDiscard(smallStraight)

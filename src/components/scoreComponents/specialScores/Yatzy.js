@@ -4,15 +4,15 @@ import {useSpecialScoresContext} from "../../../context/SpecialScoresContext";
 import {validateYatzy} from "../../../logic/validation/specialScoresValidation";
 import {useIsScoreAvailableToChoose} from "../../../hooks/useIsScoreAvailableToChoose";
 import {calculateYatzyScore} from "../../../logic/calculation/specialScoresCalculation";
-import {mutateDiscard, mutateScore} from "../../../logic/mutation/scoreMutation";
+import {mutateDiscard} from "../../../logic/mutation/scoreMutation";
 
-export const Yatzy = () => {
+export const Yatzy = ({onChosen}) => {
     const {yatzy, setYatzy} = useSpecialScoresContext()
     const [isAvailable, possibleScore] = useIsScoreAvailableToChoose(yatzy, validateYatzy, calculateYatzyScore)
 
     return (
         <ScoreBox
-            onChosen={() => isAvailable && handleSetYatzy()}
+            onChosen={() => isAvailable && onChosen(possibleScore)}
             value={yatzy}
             isAvailable={isAvailable}
         >
@@ -22,11 +22,6 @@ export const Yatzy = () => {
             <DiscardButton value={yatzy} onClick={handleDiscard}/>
         </ScoreBox>
     );
-
-    function handleSetYatzy() {
-        const newState = mutateScore(yatzy, possibleScore)
-        setYatzy(newState)
-    }
 
     function handleDiscard() {
         const newState = mutateDiscard(yatzy)

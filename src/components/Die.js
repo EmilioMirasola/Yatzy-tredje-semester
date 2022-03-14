@@ -1,22 +1,15 @@
-import {useDiceContext} from "../context/DiceContext";
 import "../views/dice.css"
-import {Fragment} from "react";
+import { Fragment } from "react";
 
-export const Die = ({index}) => {
-    const {diceStates, toggleHold, hasRolled} = useDiceContext()
+export const Die = ({ state, toggleHold, hasRolled }) => {
 
     return (
         <Fragment>
-            <div className={`dice ${isDiceBeingHold() ? "hold " : "released"}`} onClick={() => toggleHold(index)}>
+            <div className={`dice ${state.hold ? "hold " : "released"}`} onClick={toggleHold}>
                 <h1>
-                    {!hasRolled ? "?" : diceStates[index].value}
+                    {!hasRolled ? "?" : state.value}
                 </h1>
             </div>
         </Fragment>
     )
-
-    function isDiceBeingHold() {
-        return diceStates[index].hold;
-    }
-
 }

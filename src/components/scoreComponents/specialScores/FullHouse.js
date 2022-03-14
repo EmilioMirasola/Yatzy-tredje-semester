@@ -4,15 +4,15 @@ import {useSpecialScoresContext} from "../../../context/SpecialScoresContext";
 import {validateFullHouse} from "../../../logic/validation/specialScoresValidation";
 import {useIsScoreAvailableToChoose} from "../../../hooks/useIsScoreAvailableToChoose";
 import {calculateFullHouseScore} from "../../../logic/calculation/specialScoresCalculation";
-import {mutateDiscard, mutateScore} from "../../../logic/mutation/scoreMutation";
+import {mutateDiscard} from "../../../logic/mutation/scoreMutation";
 
-export const FullHouse = () => {
+export const FullHouse = ({onChosen}) => {
     const {fullHouse, setFullHouse} = useSpecialScoresContext()
     const [isAvailable, possibleScore] = useIsScoreAvailableToChoose(fullHouse, validateFullHouse, calculateFullHouseScore)
 
     return (
         <ScoreBox
-            onChosen={() => isAvailable && handleSetFullHouse()}
+            onChosen={() => isAvailable && onChosen(possibleScore)}
             value={fullHouse}
             isAvailable={isAvailable}
         >
@@ -22,11 +22,6 @@ export const FullHouse = () => {
             <DiscardButton value={fullHouse} onClick={handleDiscard}/>
         </ScoreBox>
     );
-
-    function handleSetFullHouse() {
-        const newState = mutateScore(fullHouse, possibleScore)
-        setFullHouse(newState)
-    }
 
     function handleDiscard() {
         const newState = mutateDiscard(fullHouse)
