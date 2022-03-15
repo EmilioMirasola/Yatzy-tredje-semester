@@ -1,15 +1,13 @@
-import {ScoreBox} from "../ScoreBox";
-import {DiscardButton} from "../../DiscardButton";
-import {useIsScoreAvailableToChoose} from "../../../hooks/useIsScoreAvailableToChoose";
-import {useBonusContext} from "../../../context/BonusContext";
-import {validateDiceContains} from "../../../logic/validation/bonusScoresValidation";
-import {calculateDieValueScore} from "../../../logic/calculation/bonusScoresCalculation";
-import "../ScoreBox.css"
-import "../bonusScores/bonus.css"
-import {mutateDiscard, mutateScore} from "../../../logic/mutation/scoreMutation";
+import { ScoreBox } from "../ScoreBox";
+import { DiscardButton } from "../../DiscardButton";
+import { useIsScoreAvailableToChoose } from "../../../hooks/useIsScoreAvailableToChoose";
+import { useBonusContext } from "../../../context/BonusContext";
+import { validateDiceContains } from "../../../logic/validation/bonusScoresValidation";
+import { calculateDieValueScore } from "../../../logic/calculation/bonusScoresCalculation";
+import { mutateDiscard, mutateScore } from "../../../logic/mutation/scoreMutation";
 
 export const Ones = () => {
-    const {ones, setOnes} = useBonusContext()
+    const { ones, setOnes } = useBonusContext()
     const [isAvailable, possibleScore] = useIsScoreAvailableToChoose(ones, handleValidation, handleScoreCalculation)
 
     return (
@@ -22,7 +20,7 @@ export const Ones = () => {
             <div>{ones.score}</div>
             <div>{isAvailable && possibleScore}</div>
             <div>
-                <DiscardButton value={ones} onClick={handleDiscard}/>
+                <DiscardButton value={ones} onClick={handleDiscard} />
             </div>
         </ScoreBox>
     );

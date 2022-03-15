@@ -3,6 +3,14 @@ import { useBonusContext } from "../context/BonusContext";
 import { useSpecialScoresContext } from "../context/SpecialScoresContext";
 import { updateTop10Scores } from "../logic/calculation/topScoresUtils";
 import { getInLocalStorage } from "../logic/persistence/localStorageUtils";
+import styled from "styled-components"
+
+const TopScoresBox = styled.div`
+    position: absolute;
+    right: 10%;
+    top: 10%;
+`
+
 
 export const Highscores = () => {
     const { allBonusScoresSet, bonusSum } = useBonusContext()
@@ -19,12 +27,12 @@ export const Highscores = () => {
     }, [allBonusScoresSet, allSpecialScoresSet])
 
     return (
-        <div className='topScores'>
+        <TopScoresBox>
             <h2>Highscores</h2>
             {!top10Scores && <h3>Play a game to get it on your highscore!</h3>}
             {top10Scores && top10Scores.map(score => {
                 return <div>{score}</div>
             })}
-        </div>
+        </TopScoresBox>
     );
 }
