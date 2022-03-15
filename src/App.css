@@ -23,16 +23,6 @@ body {
     width: 150px;
 }
 
-.sumContainer {
-    position: absolute;
-}
-
-.bonusAndSumContainer {
-    display: flex;
-    width: 150px;
-    justify-content: space-between;
-}
-
 .topScores {
     position: absolute;
     right: 10%;

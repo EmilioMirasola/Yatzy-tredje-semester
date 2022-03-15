@@ -20,7 +20,7 @@ export const DiceContext = ({children}) => {
             handleScoreChosen,
             hasRolled,
             rollDices,
-            toggleHold
+            toggleHold,
         }}>
             {children}
         </Context.Provider>

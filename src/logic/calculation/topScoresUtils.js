@@ -15,21 +15,15 @@ export function updateTop10Scores(score) {
         const top10Scores = getInLocalStorage("top10Scores")
         if (top10Scores) {
             if (top10Scores.length >= 10) {
-                mergeScoreIntoScoreArray(score, top10Scores)
-                setInLocalStorage("top10Scores", top10Scores)
-            } else {
-                top10Scores.push(score)
-                const sorted = top10Scores.sort((a, b) => b - a)
-                setInLocalStorage("top10Scores", sorted)
+                top10Scores.pop()
             }
+            top10Scores.push(score)
+            const sorted = top10Scores.sort((a, b) => b - a)
+            setInLocalStorage("top10Scores", sorted)
         } else {
             setInLocalStorage("top10Scores", Array.of(score))
         }
     }
-}
 
-function mergeScoreIntoScoreArray(score, top10Scores) {
-    const spliceIndex = top10Scores.find(topScore => score > topScore)
-
-    top10Scores.splice(spliceIndex, 1, score)
+    return Promise.resolve()
 }

@@ -36,8 +36,9 @@ export const SpecialScoresContext = ({ children }) => {
             largeStraight, setLargeStraight,
             chance, setChance,
             yatzy, setYatzy,
+            allSpecialScoresSet,
+            resetSpecialScoresContext,
             specialScoresSum,
-            allSpecialScoresSet
         }}>
             {children}
         </Context.Provider>)
@@ -52,6 +53,18 @@ export const SpecialScoresContext = ({ children }) => {
 
         const allSet = states.every(state => state.score !== 0 || state.discarded)
         setAllSpecialScoresSet(allSet)
+    }
+
+    function resetSpecialScoresContext() {
+        setOnePair(initState)
+        setTwoPairs(initState)
+        setThreeSame(initState)
+        setFourSame(initState)
+        setFullHouse(initState)
+        setSmallStraight(initState)
+        setLargeStraight(initState)
+        setChance(initState)
+        setYatzy(initState)
     }
 
 }

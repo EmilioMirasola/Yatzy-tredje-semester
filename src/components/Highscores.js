@@ -1,33 +1,30 @@
+import { useEffect, useMemo, useState } from "react";
 import { useBonusContext } from "../context/BonusContext";
 import { useSpecialScoresContext } from "../context/SpecialScoresContext";
-import { getInLocalStorage } from "../logic/persistence/localStorageUtils";
 import { updateTop10Scores } from "../logic/calculation/topScoresUtils";
-import { useEffect, useState } from "react";
+import { getInLocalStorage } from "../logic/persistence/localStorageUtils";
 
-export const TopScores = () => {
+export const Highscores = () => {
     const { allBonusScoresSet, bonusSum } = useBonusContext()
     const { allSpecialScoresSet, specialScoresSum } = useSpecialScoresContext()
-    const top10Scores = getInLocalStorage("top10Scores")
-    const [ok, setOk] = useState(false)
+    const [top10Scores, setTop10Scores] = useState(getInLocalStorage("top10Scores"))
 
     useEffect(() => {
         if (allBonusScoresSet && allSpecialScoresSet) {
-            updateTop10Scores(bonusSum + specialScoresSum)
+            updateTop10Scores(bonusSum + specialScoresSum + (bonusSum >= 63 ? 50 : 0))
+                .then(() => {
+                    setTop10Scores(getInLocalStorage("top10Scores"))
+                })
         }
     }, [allBonusScoresSet, allSpecialScoresSet])
 
-
     return (
         <div className='topScores'>
-            <h2>Top scores</h2>
+            <h2>Highscores</h2>
+            {!top10Scores && <h3>Play a game to get it on your highscore!</h3>}
             {top10Scores && top10Scores.map(score => {
                 return <div>{score}</div>
             })}
-            {allBonusScoresSet && allSpecialScoresSet}
-            <button onClick={() => {
-                setOk(!ok)
-                updateTop10Scores(bonusSum + specialScoresSum);
-            }}>Update</button>
         </div>
     );
 }

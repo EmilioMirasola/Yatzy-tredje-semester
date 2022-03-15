@@ -37,6 +37,7 @@ export const BonusContext = ({ children }) => {
         sixes,
         setSixes,
         allBonusScoresSet,
+        resetBonusContext,
         bonusSum
     }}>
         {children}
@@ -52,6 +53,15 @@ export const BonusContext = ({ children }) => {
 
         const allSet = states.every(state => state.score !== 0 || state.discarded)
         setAllBonusScoresSet(allSet)
+    }
+
+    function resetBonusContext() {
+        setOnes(initState)
+        setTwos(initState)
+        setThrees(initState)
+        setFours(initState)
+        setFives(initState)
+        setSixes(initState)
     }
 }
 

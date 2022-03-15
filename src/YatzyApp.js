@@ -5,7 +5,7 @@ import { Dice } from "./views/Dice";
 import { BonusScores } from "./views/BonusScores";
 import { SpecialScores } from "./views/SpecialScores";
 import { Sum } from "./components/scoreComponents/Sum";
-import { TopScores } from './components/TopScores';
+import { Highscores } from './components/Highscores';
 
 
 export const YatzyApp = () => {
@@ -24,7 +24,7 @@ export const YatzyApp = () => {
                 <SpecialScores />
                 <Sum />
             </div>
-            <TopScores />
+            <Highscores />
         </Fragment>
     );
 }
