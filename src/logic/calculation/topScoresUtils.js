@@ -1,7 +1,11 @@
-import { getInLocalStorage } from "../persistence/localStorageUtils";
+import { getInLocalStorage, setInLocalStorage } from "../persistence/localStorageUtils";
 
 export function checkIfScoreIsInTop10(score) {
     const top10Scores = getInLocalStorage("top10Scores")
+    if (!top10Scores || top10Scores.length < 10) {
+        return true
+    }
+
     return score > top10Scores[top10Scores.length - 1]
 }
 
@@ -9,6 +13,23 @@ export function updateTop10Scores(score) {
     const scoreIsinTop10 = checkIfScoreIsInTop10(score)
     if (scoreIsinTop10) {
         const top10Scores = getInLocalStorage("top10Scores")
-        top10Scores.findIndex(topScore => topScore < score)
+        if (top10Scores) {
+            if (top10Scores.length >= 10) {
+                mergeScoreIntoScoreArray(score, top10Scores)
+                setInLocalStorage("top10Scores", top10Scores)
+            } else {
+                top10Scores.push(score)
+                const sorted = top10Scores.sort((a, b) => b - a)
+                setInLocalStorage("top10Scores", sorted)
+            }
+        } else {
+            setInLocalStorage("top10Scores", Array.of(score))
+        }
     }
+}
+
+function mergeScoreIntoScoreArray(score, top10Scores) {
+    const spliceIndex = top10Scores.find(topScore => score > topScore)
+
+    top10Scores.splice(spliceIndex, 1, score)
 }
